@@ -9,4 +9,4 @@ spec:
       targetPort: 8001
   selector:
     app: msvc-usuarios
-  type: ClusterIP
+  type: LoadBalancer

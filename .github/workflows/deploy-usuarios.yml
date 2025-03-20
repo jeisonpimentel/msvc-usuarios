@@ -55,5 +55,4 @@ jobs:
         run: |
           kubectl apply -f k8s-config/deployments/deployment-usuarios.yaml
           kubectl apply -f k8s-config/services/svc-usuarios.yaml
-          kubectl apply -f k8s-config/ingress/ingress-usuarios.yaml
           kubectl rollout status deployment/msvc-usuarios
