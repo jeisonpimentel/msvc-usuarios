@@ -1,0 +1,58 @@
+name: Deploy Microservice Usuario
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: 🛎 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🔐 Authenticate with Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GCP_SA_KEY }}
+
+      - name: 📦 Set up gcloud CLI
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: 🔄 Install GKE Auth Plugin
+        run: |
+          gcloud components install gke-gcloud-auth-plugin
+          echo "export USE_GKE_GCLOUD_AUTH_PLUGIN=True" >> $GITHUB_ENV
+
+      - name: ⚙️ Configure kubectl
+        run: |
+          gcloud container clusters get-credentials cluster-gke-standard --region=us-west1
+          kubectl cluster-info
+
+      - name: 🔨 Build & Push Docker Image to Google Artifact Registry
+        run: |
+          # Define variables
+          PROJECT_ID="project-gke-453903"
+          REGION="us-central1"
+          IMAGE_NAME="usuarios"
+          IMAGE_TAG="latest"
+          IMAGE_PATH="$REGION-docker.pkg.dev/$PROJECT_ID/usuarios/$IMAGE_NAME:$IMAGE_TAG"
+
+          # Autenticación con Artifact Registry
+          gcloud auth configure-docker $REGION-docker.pkg.dev
+
+          # Construcción y Push de la imagen
+          docker build -t $IMAGE_PATH .
+          docker push $IMAGE_PATH
+
+      - name: 🚀 Deploy Microservice Usuario to GKE
+        run: |
+          kubectl apply -f k8s-config/deployment-usuarios.yaml
+          kubectl apply -f k8s-config/svc-usuarios.yaml
+          kubectl rollout status deployment/deployment-usuarios
