@@ -51,22 +51,6 @@ spec:
               secretKeyRef:
                 name: msvc-usuarios
                 key: password
-        readinessProbe:
-          httpGet:
-            path: /actuator/health/readiness
-            port: 8001
-            scheme: HTTP
-          initialDelaySeconds: 5
-          periodSeconds: 20
-          timeoutSeconds: 10
-        livenessProbe:
-          httpGet:
-            path: /actuator/health/liveness
-            port: 8001
-            scheme: HTTP
-          initialDelaySeconds: 10
-          periodSeconds: 30
-          timeoutSeconds: 10
         resources:
           requests:
             memory: "256Mi"
