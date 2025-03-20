@@ -12,6 +12,7 @@ spec:
       labels:
         app: msvc-usuarios
     spec:
+      serviceAccountName: microservice-sa
       containers:
       - image: us-central1-docker.pkg.dev/project-gke-453903/usuarios/usuarios:latest
         name: usuarios

@@ -53,7 +53,7 @@ jobs:
 
       - name: 🚀 Deploy Microservice Usuario to GKE
         run: |
-          kubectl apply -f k8s-config/deployment-usuarios.yaml
-          kubectl apply -f k8s-config/svc-usuarios.yaml
-          kubectl apply -f k8s-config/ingress-usuarios.yaml
+          kubectl apply -f k8s-config/deployments/deployment-usuarios.yaml
+          kubectl apply -f k8s-config/services/svc-usuarios.yaml
+          kubectl apply -f k8s-config/ingress/ingress-usuarios.yaml
           kubectl rollout status deployment/msvc-usuarios
