@@ -1,0 +1,18 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: usuarios-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "usuarios-ingress-ip"
+    kubernetes.io/ingress.class: "nginx"
+spec:
+  rules:
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: msvc-usuarios-service
+                port:
+                  number: 80
