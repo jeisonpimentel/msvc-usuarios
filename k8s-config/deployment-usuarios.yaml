@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: msvc-usuarios
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
       app: msvc-usuarios
